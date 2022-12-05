@@ -7,6 +7,8 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import { dbConnect } from './config/mongo.js';
 
+import categoryRouter from './routes/categories.js';
+
 const app = express();
 const port = process.env.PORT || 9000;
 
@@ -20,11 +22,13 @@ app.use(fileUpload({
     tempFileDir : '/uploads'
 }));
 
-//routes
-app.get('/',(req,res) => res.send("Hello"))
 
 app.listen(port, () => {
     console.log(`App ready in http://localhost:${port}`)
 })
 
 dbConnect();
+
+
+//routes
+app.use('/api/categories', categoryRouter);
