@@ -1,18 +1,18 @@
-/* import { CategoryController } from "../controllers/categories.js";
+import { CategoryController } from "../controllers/categories.js";
 import { CategoryValidator } from "../validators/categories.js";
-import { verifyMiddle } from "../middleware/verify.js"; */
+import { verifyMiddle } from "../middleware/verify.js";
 import { Router } from "express"; 
 
-const categoryRouter = Router();
+const router = Router();
 
-categoryRouter.get('/', (req,res) => res.send("Hello")/* CategoryController.getCategory */);
-/* 
-categoryRouter.get('/:id', CategoryController.getOneCategory);
+router.get('/', CategoryController.getCategory);
 
-categoryRouter.post('/', verifyMiddle.verifyToken, CategoryValidator.createCategoryValidator, CategoryController.createCategory);
+router.get('/:id', CategoryController.getOneCategory);
 
-categoryRouter.put('/:id', verifyMiddle.verifyToken, CategoryValidator.updateCategoryValidator, CategoryController.updateCategory);
+router.post('/', verifyMiddle.verifyToken, CategoryValidator.createCategoryValidator, CategoryController.createCategory);
 
-categoryRouter.delete('/:id', verifyMiddle.verifyToken, CategoryController.deleteCategory); */
+router.put('/:id', verifyMiddle.verifyToken, CategoryValidator.updateCategoryValidator, CategoryController.updateCategory);
+
+router.delete('/:id', verifyMiddle.verifyToken, CategoryController.deleteCategory);
  
-export default categoryRouter;
+export default router;
