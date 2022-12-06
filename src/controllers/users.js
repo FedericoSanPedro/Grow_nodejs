@@ -3,51 +3,93 @@ import User  from "../models/users.js";
 import { uploadImage } from "../config/cloudinary.js"; 
 
 export const getUsers = async (req, res) => {
-  const data = await User.find({}); 
+  try {
+    const user = await User.find({}); 
 
-  res.json(data);
+  res.json(user);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 
 }
 
 export const getOneUser = async (req, res) => {
-  const data = await User.findById(req.params.id); 
+  try {
+    const user = await User.findById(req.params.id); 
+
+  if(!user){
+    return res.status(404).json({
+      message: "User no exist."
+    })
+  }
  
-  res.json(data);
+  return res.json(user);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 }
 
 export const createUser = async (req, res) => {  
-      
+    
+  try{
     const {email, password, full_name} = req.body;
 
-  const user = new User({
-    email,
-    password,
-    full_name
-  })
-
-  if(req.files?.url_image){
-    const result = await uploadImage(req.files.url_image.tempFilePath)
+    const user = new User({
+      email,
+      password,
+      full_name
+    })
+  
+    if(req.files?.url_image){
+      const result = await uploadImage(req.files.url_image.tempFilePath);
+      user.url_image = {
+        public_id: result.public_id,
+        secure_url: result.secure_url
+      }
+    }
+  
+    await user.save();
+  
+    res.json(user);
+  }catch(error){
+    return res.status(500).json({
+      message: error.message
+    })
   }
-
-  await user.save();
-
-  res.json(user);
+  
 }
 
 export const updateUser = async (req, res) => {
 
-    const { id } = req.params;
+    try {
+      const { id } = req.params;
  
-  const data = await User.findByIdAndUpdate(id, req.body,{
+  const user = await User.findByIdAndUpdate(id, req.body,{
     new: true
   });
-  res.json(data);
+  res.json(user);
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      })
+    }
 }
 
 
 export const deleteUser = async (req, res) => {
+  try {
+    
+  const user = await User.findByIdAndDelete(req.params.id); 
 
-  const data = await User.findByIdAndDelete(req.params.id); 
+  res.json(user);
 
-  res.json(data);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 }
