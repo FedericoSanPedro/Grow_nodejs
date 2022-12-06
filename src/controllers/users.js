@@ -33,6 +33,26 @@ export const getOneUser = async (req, res) => {
   }
 }
 
+export const getOneUserByEmail = async (email) => {
+  try {
+
+    const user = await User.find({_email : email});
+
+    if(!user){
+      return res.status(404).json({
+        message: "User no exist."
+      })
+    }
+  
+    return user;
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
 export const createUser = async (req, res) => {  
     
   try{

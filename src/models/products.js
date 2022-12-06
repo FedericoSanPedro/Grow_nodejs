@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// name, price, description, url_image, category
+// name, price, description, url_image, category, stock
 const productSchema = mongoose.Schema({
     name: {
     type: String,
@@ -11,15 +11,15 @@ const productSchema = mongoose.Schema({
     required: true
   },
   description: {
-    type: Date,
+    type: String,
     required: true
 
-  },
+  }/* ,
   url_image: {
     type: String,
     required: true
 
-  },
+  } */,
   category: {
     type: String,
     required: true
@@ -32,4 +32,4 @@ const productSchema = mongoose.Schema({
   }
 });
 
-export { productSchema };
+export default mongoose.model("Product", productSchema);

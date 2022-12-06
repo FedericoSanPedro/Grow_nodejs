@@ -1,49 +1,99 @@
 import { matchedData } from "express-validator";
-import { getProductsService, getOneProductService, createProductService, updateProductService, deleteProductService } from "../services/products.js";
+import Product  from "../models/products.js";
+import { uploadImage } from "../config/cloudinary.js"; 
 
-const ProductController = {};
+export const getProducts = async (req, res) => {
+  try {
+    const product = await Product.find({}); 
 
-ProductController.getProducts = (req, res) => {
-  getProductsService()
-  .then((data) => res.json(data))
-  .catch((error) => res.json({ message: error }));c
-
-}
-
-ProductController.getOneProduct = (req, res) => {
-
-    const { id } = req.params;
-    getOneProductService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
+  res.json(product);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 
 }
 
-ProductController.createProduct = (req, res) => {  
-      
-    const product = productSchema(req.body);
-    createProductService(product)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+export const getOneProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id); 
+
+  if(!product){
+    return res.status(404).json({
+      message: "Product no exist."
+    })
+  }
+ 
+  return res.json(product);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
+// name, price, description, url_image, category
+export const createProduct = async (req, res) => {  
+    
+  try{
+    const {name, price, description, category, stock} = req.body;
+
+    const product = new Product({
+      name,
+      price,
+      description,
+      category,
+      stock
+    })
+  
+   /*  if(req.files?.url_image){
+       const result = await uploadImage(req.files.url_image.tempFilePath);
+       console.log(result)
+     product.url_image = {
+        public_id: result.public_id,
+        secure_url: result.secure_url
+      }
+    } */
+  
+    await product.save()
+  
+    res.json(product)
+  }catch(error){
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+  
+}
+
+export const updateProduct = async (req, res) => {
+
+    try {
+      const { id } = req.params;
+ 
+  const product = await Product.findByIdAndUpdate(id, req.body,{
+    new: true
+  });
+  res.json(product);
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      })
+    }
 }
 
 
-// name, price, description, url_image, category, stock
-ProductController.updateProduct = async (req, res) => {
+export const deleteProduct = async (req, res) => {
+  try {
+    
+  const product = await Product.findByIdAndDelete(req.params.id); 
 
-    const { id } = req.params;
-  const { name, price, description, url_image, category, stock} = req.body;
-  updateProductService(id, name, price, description, url_image, category, stock)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+  res.json(product);
+
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 }
-
-
-ProductController.deleteProduct = async (req, res) => {
-    const { id } = req.params;
-    deleteProductService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
-}
-
-export { ProductController };

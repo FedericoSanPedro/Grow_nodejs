@@ -1,48 +1,88 @@
 import { matchedData } from "express-validator";
-import { getOrdersService, getOneOrderService, createOrderService, updateOrderService, deleteOrderService } from "../services/orders.js";
-import { response } from "express";
+import Order  from "../models/orders.js";
 
-const OrderController = {};
+export const getOrders = async (req, res) => {
+  try {
+    const order = await Order.find({}); 
 
-OrderController.getOrders = (req, res) => {
-  getOrdersService()
-  .then((data) => res.json(data))
-  .catch((error) => res.json({ message: error }));c
-
-}
-
-OrderController.getOneOrder = (req, res) => {
-
-    const { id } = req.params;
-    getOneOrderService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
+  res.json(order);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 
 }
 
-OrderController.createOrder = (req, res) => {  
-      
-    const order = orderSchema(req.body);
+export const getOneOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id); 
 
-    createOrderService(order)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+  if(!order){
+    return res.status(404).json({
+      message: "Order no exist."
+    })
+  }
+ 
+  return res.json(order);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 }
 
-OrderController.updateOrder = async (req, res) => {
+// customer_id, ammount, order_date, order_status
+export const createOrder = async (req, res) => {  
+    
+  try{
+    const {customer_id, ammount, order_date, order_status} = req.body;
 
-    const { id } = req.params;
-  const { ammount} = req.body;
-  updateOrderService(id, ammount)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+    const order = new Order({
+      customer_id,
+      ammount,
+      order_date,
+      order_status
+    })
+  
+    await order.save()
+  
+    res.json(order)
+  }catch(error){
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+  
 }
 
-OrderController.deleteOrder = async (req, res) => {
-    const { id } = req.params;
-    deleteOrderService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
+export const updateOrder = async (req, res) => {
+
+    try {
+      const { id } = req.params;
+ 
+  const order = await Order.findByIdAndUpdate(id, req.body,{
+    new: true
+  });
+  res.json(order);
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      })
+    }
 }
 
-export { OrderController };
+
+export const deleteOrder = async (req, res) => {
+  try {
+    
+  const order = await Order.findByIdAndDelete(req.params.id); 
+
+  res.json(order);
+
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+}

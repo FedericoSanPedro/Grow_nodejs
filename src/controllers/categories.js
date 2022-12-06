@@ -1,48 +1,86 @@
 import { matchedData } from "express-validator";
-import { getCategoryService, getOneCategoryService, createCategoryService, updateCategoryService, deleteCategoryService } from "../services/categories.js";
+import Category  from "../models/categories.js";
 
-const CategoryController = {};
+export const getCategories = async (req, res) => {
+  try {
+    const category = await Category.find({}); 
 
-CategoryController.getCategory = (req, res) => {
-  getCategoryService()
-  .then((data) => res.json(data))
-  .catch((error) => res.json({ message: error }));c
-
-}
-
-CategoryController.getOneCategory = (req, res) => {
-
-    const { id } = req.params;
-    getOneCategoryService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
+  res.json(category);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 
 }
 
-CategoryController.createCategory = (req, res) => {  
-      
-    const category = categorySchema(req.body);
-    createCategoryService(category)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+export const getOneCategory = async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id); 
+
+  if(!category){
+    return res.status(404).json({
+      message: "Category no exist."
+    })
+  }
+ 
+  return res.json(category);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
 }
 
 // name, description
-CategoryController.updateCategory = async (req, res) => {
+export const createCategory = async (req, res) => {  
+    
+  try{
+    const {name, description} = req.body;
 
-    const { id } = req.params;
-  const { name, description } = req.body;
-  updateCategoryService(id, name, description)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+    const category = new Category({
+      name,
+      description
+    })
+  
+    await category.save()
+  
+    res.json(category)
+  }catch(error){
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+  
+}
+
+export const updateCategory = async (req, res) => {
+
+    try {
+      const { id } = req.params;
+ 
+  const category = await Category.findByIdAndUpdate(id, req.body,{
+    new: true
+  });
+  res.json(category);
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      })
+    }
 }
 
 
-CategoryController.deleteCategory = async (req, res) => {
-    const { id } = req.params;
-    deleteCategoryService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
-}
+export const deleteCategory = async (req, res) => {
+  try {
+    
+  const category = await Category.findByIdAndDelete(req.params.id); 
 
-export { CategoryController };
+  res.json(category);
+
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+}

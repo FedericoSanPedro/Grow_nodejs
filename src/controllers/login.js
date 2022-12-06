@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { matchedData } from 'express-validator';
-import { getOneUserByEmail } from "../services/users.js";
+import { getOneUserByEmail } from "../controllers/users.js";
 
 const loginRouter = {};
 
