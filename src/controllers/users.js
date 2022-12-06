@@ -36,25 +36,27 @@ export const getOneUser = async (req, res) => {
 export const createUser = async (req, res) => {  
     
   try{
-    const {email, password, full_name} = req.body;
+    const {email, password, full_name, role} = req.body;
 
     const user = new User({
       email,
       password,
-      full_name
+      full_name,
+      role
     })
   
-    if(req.files?.url_image){
-      const result = await uploadImage(req.files.url_image.tempFilePath);
-      user.url_image = {
+   /*  if(req.files?.url_image){
+       const result = await uploadImage(req.files.url_image.tempFilePath);
+       console.log(result)
+     user.url_image = {
         public_id: result.public_id,
         secure_url: result.secure_url
       }
-    }
+    } */
   
-    await user.save();
+    await user.save()
   
-    res.json(user);
+    res.json(user)
   }catch(error){
     return res.status(500).json({
       message: error.message
