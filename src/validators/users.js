@@ -15,7 +15,6 @@ UserValidator.updateUserValidator = [
   check("email").optional().isEmail(),
   check("password").optional().notEmpty(),
   check("full_name").optional().notEmpty().isLength({ min: 5, max: 50 }),
-  check("role").exists().isIn(['admin', 'customer']),
   (req, res, next) => handleValidators.validateResults(req, res, next)
 ];
 

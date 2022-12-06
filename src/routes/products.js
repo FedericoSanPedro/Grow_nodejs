@@ -9,9 +9,9 @@ router.get('/', getProducts);
 
 router.get('/:id', getOneProduct);
 
-router.post('/', /* verifyMiddle.verifyToken, ProductValidator.createProductValidator, */ createProduct);
+router.post('/', /* verifyMiddle.verifyToken, */ ProductValidator.createProductValidator, createProduct);
 
-router.put('/:id',/*  verifyMiddle.verifyToken, ProductValidator.updateProductValidator, */ updateProduct);
+router.put('/:id',/*  verifyMiddle.verifyToken, */ ProductValidator.updateProductValidator, updateProduct);
 
 router.delete('/:id', /* verifyMiddle.verifyToken, */ deleteProduct);
  

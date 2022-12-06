@@ -8,9 +8,9 @@ router.get('/', getUsers);
 
 router.get('/:id', getOneUser);
 
-router.post('/',/*  UserValidator.createUserValidator, */ createUser);
+router.post('/', UserValidator.createUserValidator, createUser);
 
-router.put('/:id', /* UserValidator.updateUserValidator, */ updateUser);
+router.put('/:id', UserValidator.updateUserValidator, updateUser);
 
 router.delete('/:id', deleteUser);
 

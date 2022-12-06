@@ -9,9 +9,9 @@ router.get('/', getCategories);
 
 router.get('/:id', getOneCategory);
 
-router.post('/', /* verifyMiddle.verifyToken, CategoryValidator.createCategoryValidator, */ createCategory);
+router.post('/', /* verifyMiddle.verifyToken, */ CategoryValidator.createCategoryValidator, createCategory);
 
-router.put('/:id',/*  verifyMiddle.verifyToken, CategoryValidator.updateCategoryValidator, */ updateCategory);
+router.put('/:id',/*  verifyMiddle.verifyToken, */ CategoryValidator.updateCategoryValidator, updateCategory);
 
 router.delete('/:id', /* verifyMiddle.verifyToken, */ deleteCategory);
  
