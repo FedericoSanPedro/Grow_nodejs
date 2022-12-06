@@ -1,9 +1,9 @@
-import { userSchema } from "../models/users.js";
-import { uploadImage } from "../config/cloudinary.js";
+import User  from "../models/users.js";/* 
+import { uploadImage } from "../config/cloudinary.js"; */
 
 export const getUsersService = async () => {
    
-   const data = await userSchema.find({}); 
+   const data = await User.find({}); 
 
    return data;
 
@@ -11,7 +11,7 @@ export const getUsersService = async () => {
 
 export const getOneUserService = async (id) => {
    
-    const data = await userSchema.find({_id : id}); 
+    const data = await User.find({_id : id}); 
  
     return data;
  
@@ -19,7 +19,7 @@ export const getOneUserService = async (id) => {
 
  export const getOneUserByEmail = async (email) => {
    
-    const data = await userSchema.find({_email : email}); 
+    const data = await User.find({_email : email}); 
  
     return data;
  
@@ -35,7 +35,7 @@ export const createUserService = async (body) => {
         result = await uploadImage(req.files.url_image.tempFilePath);
     }
 
-    const data = await userSchema.create({
+    const data = await User.create({
         email,
         password,
         full_name,
@@ -58,7 +58,7 @@ export const updateUserService = async (id, email, password, full_name, url_imag
         result = await uploadImage(req.files.url_image.tempFilePath);
     }
 
-    const data = await userSchema.update({_id, id}, { $set: { 
+    const data = await User.update({_id, id}, { $set: { 
         email,
         password,
         full_name,
@@ -73,7 +73,7 @@ export const updateUserService = async (id, email, password, full_name, url_imag
 
 export const deleteUserService = async (id) => {
    
-    const data = await userSchema.delete({_id : id}); 
+    const data = await User.delete({_id : id}); 
  
     return data;
  

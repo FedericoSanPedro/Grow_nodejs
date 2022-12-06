@@ -1,47 +1,53 @@
 import { matchedData } from "express-validator";
-import { getUsersService, getOneUserService, createUserService, updateUserService, deleteUserService } from "../services/users.js";
+import User  from "../models/users.js";
+import { uploadImage } from "../config/cloudinary.js"; 
 
-const UserController = {};
+export const getUsers = async (req, res) => {
+  const data = await User.find({}); 
 
-UserController.getUsers = (req, res) => {
-  getUsersService()
-  .then((data) => res.json(data))
-  .catch((error) => res.json({ message: error }));
-
-}
-
-UserController.getOneUser = (req, res) => {
-
-    const { id } = req.params;
-    getOneUserService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
+  res.json(data);
 
 }
 
-UserController.createUser = (req, res) => {  
+export const getOneUser = async (req, res) => {
+  const data = await User.findById(req.params.id); 
+ 
+  res.json(data);
+}
+
+export const createUser = async (req, res) => {  
       
-    const user = userSchema(req.body);
-    createUserService(user)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+    const {email, password, full_name} = req.body;
+
+  const user = new User({
+    email,
+    password,
+    full_name
+  })
+
+  if(req.files?.url_image){
+    const result = await uploadImage(req.files.url_image.tempFilePath)
+  }
+
+  await user.save();
+
+  res.json(user);
 }
 
-UserController.updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
 
     const { id } = req.params;
-  const { email, password, full_name, url_image} = req.body;
-  updateUserService(id, email, password, full_name, url_image)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
+ 
+  const data = await User.findByIdAndUpdate(id, req.body,{
+    new: true
+  });
+  res.json(data);
 }
 
 
-UserController.deleteUser = async (req, res) => {
-    const { id } = req.params;
-    deleteUserService(id)
-      .then((data) => res.json(data))
-      .catch((error) => res.json({ message: error }));
-}
+export const deleteUser = async (req, res) => {
 
-export { UserController };
+  const data = await User.findByIdAndDelete(req.params.id); 
+
+  res.json(data);
+}
