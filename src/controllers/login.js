@@ -28,8 +28,7 @@ export const login = async (req,res) => {
             role: user.role,
     },process.env.SECRET)
 
-    res.json({
-        mensaje: "Bienvenido master",
-        token
+    res.header('auth-token', token).json({
+        data: {token}
     })
 }
