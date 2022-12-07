@@ -1,4 +1,3 @@
-import { matchedData } from "express-validator";
 import Category  from "../models/categories.js";
 
 export const getCategories = async (req, res) => {

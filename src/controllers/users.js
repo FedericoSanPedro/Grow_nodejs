@@ -1,4 +1,3 @@
-import { matchedData } from "express-validator";
 import User  from "../models/users.js";
 import bcrypt from "bcrypt";
 import { uploadImage } from "../config/cloudinary.js"; 

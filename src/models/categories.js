@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// name, description
 const CategorySchema = mongoose.Schema({
     name: {
     type: String,

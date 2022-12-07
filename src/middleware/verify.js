@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = async (req, res, next) => {
-  const token = req.header('auth-token');
+  const token = req.header('Authorization');
 
   if(!token){
     return res.status(401).json({error: 'token missing or invalid'})

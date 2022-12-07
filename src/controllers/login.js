@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { matchedData } from 'express-validator';
 import User  from "../models/users.js";
 
 export const login = async (req,res) => {

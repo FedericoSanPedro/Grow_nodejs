@@ -1,4 +1,3 @@
-import { matchedData } from "express-validator";
 import Product  from "../models/products.js";
 import { uploadImage } from "../config/cloudinary.js"; 
 

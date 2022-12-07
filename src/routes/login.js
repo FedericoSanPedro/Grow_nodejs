@@ -4,6 +4,6 @@ import { Router } from "express";
 
 const router = Router();
 
-router.post('/', /* loginValidator.login, */ login);
+router.post('/', loginValidator.login, login);
  
 export default router;
