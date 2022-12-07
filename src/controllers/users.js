@@ -1,5 +1,6 @@
 import { matchedData } from "express-validator";
 import User  from "../models/users.js";
+import bcrypt from "bcrypt";
 import { uploadImage } from "../config/cloudinary.js"; 
 
 export const getUsers = async (req, res) => {
@@ -36,7 +37,7 @@ export const getOneUser = async (req, res) => {
 export const getOneUserByEmail = async (email) => {
   try {
 
-    const user = await User.find({_email : email});
+    const user = await User.findOne(email);
 
     if(!user){
       return res.status(404).json({
@@ -58,11 +59,14 @@ export const createUser = async (req, res) => {
   try{
     const {email, password, full_name, role} = req.body;
 
+    const salt = await bcrypt.genSalt(10);
+    const secure_password = await bcrypt.hash(password, salt);
+
     const user = new User({
-      email,
-      password,
-      full_name,
-      role
+      email: email,
+      password: secure_password,
+      full_name: full_name,
+      role: role
     })
   
    /*  if(req.files?.url_image){

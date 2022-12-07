@@ -1,40 +1,35 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { matchedData } from 'express-validator';
-import { getOneUserByEmail } from "../controllers/users.js";
+import User  from "../models/users.js";
 
-export const login = (req,res) => {
-    /* let body = matchedData(req) */
-    const {email, password} = req.body
+export const login = async (req,res) => {
 
-    const user = getOneUserByEmail(email)
-    const passwordCorrect = user === null
-    ? false
-    : bcrypt.compare(password, user.password)
+    const user = await User.findOne({email: req.body.email});
 
-    if(!(user && passwordCorrect)){
+    if(!user){
+      return res.status(404).json({
+        message: "User no exist."
+      })
+    }
+
+    const validPassword = await bcrypt.compare(req.body.password, user.password)
+
+    if(!(user && validPassword)){
         res.status(401).json({
             error: "invalid user or password"
         })
     }
 
-    const userInfo = {
+    const token = jwt.sign({
             id: user._id,
             email: user.email,
-            password: user.password,
             full_name: user.full_name,
             role: user.role,
-    }
+    },process.env.SECRET)
 
-    const token = jwt.sign(userInfo, process.env.SECRET)
-
-    res.send({
-        id: user._id,
-        full_name: user.full_name,
-        email: user.email,
-        password: user.password,
-        role: user.role,
+    res.json({
+        mensaje: "Bienvenido master",
         token
-
     })
 }
