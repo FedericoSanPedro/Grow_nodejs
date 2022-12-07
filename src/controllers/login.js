@@ -27,7 +27,7 @@ export const login = async (req,res) => {
             role: user.role,
     },process.env.SECRET)
 
-    res.header('auth-token', token).json({
+    res.header('Authorization', token).json({
         data: {token}
     })
 }

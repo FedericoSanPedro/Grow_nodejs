@@ -68,14 +68,14 @@ export const createUser = async (req, res) => {
       role: role
     })
   
-   /*  if(req.files?.url_image){
+    if(req.files?.url_image){
        const result = await uploadImage(req.files.url_image.tempFilePath);
        console.log(result)
      user.url_image = {
         public_id: result.public_id,
         secure_url: result.secure_url
       }
-    } */
+    }
   
     await user.save()
   

@@ -14,12 +14,12 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true
 
-  }/* ,
+  },
   url_image: {
-    type: String,
-    required: true
+    public_id: String,
+    secure_url: String
 
-  } */,
+  },
   category: {
     type: String,
     required: true
