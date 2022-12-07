@@ -3,16 +3,14 @@ import jwt from "jsonwebtoken";
 import { matchedData } from 'express-validator';
 import { getOneUserByEmail } from "../controllers/users.js";
 
-const loginRouter = {};
-
-loginRouter.login = (req,res) => {
-    let body = matchedData(req)
-    const {email, password} = body
+export const login = (req,res) => {
+    /* let body = matchedData(req) */
+    const {email, password} = req.body
 
     const user = getOneUserByEmail(email)
     const passwordCorrect = user === null
     ? false
-    : bcrypt.compare(password, user.passwordHash)
+    : bcrypt.compare(password, user.password)
 
     if(!(user && passwordCorrect)){
         res.status(401).json({
@@ -40,9 +38,3 @@ loginRouter.login = (req,res) => {
 
     })
 }
-
-export { loginRouter }
-
-
-
-

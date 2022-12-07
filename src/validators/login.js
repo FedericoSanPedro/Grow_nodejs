@@ -4,8 +4,8 @@ import { handleValidators } from "../helpers/handleValidators.js";
 const loginValidator = {};
 
 loginValidator.login = [
-  check("email").optional().isEmail(),
-  check("password").optional().notEmpty().isString(),
+  check("email").exists().isEmail(),
+  check("password").exists().notEmpty().isString(),
   (req, res, next) => handleValidators.validateResults(req, res, next)
 ];
 
