@@ -18,7 +18,7 @@ handleValidators.validateRole = (role, req, res, next) => {
             return next();
         }
 
-        res.status(403).json({error: 'No puedes hacer usar este route con tu tipo de user'});
+        res.status(403).json({error: 'No puedes usar este route con tu tipo de user'});
 };
 
 export { handleValidators };
