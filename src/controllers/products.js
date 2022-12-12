@@ -46,14 +46,13 @@ export const createProduct = async (req, res) => {
       stock
     })
   
-   /*  if(req.files?.url_image){
+    if(req.files?.url_image){
        const result = await uploadImage(req.files.url_image.tempFilePath);
-       console.log(result)
      product.url_image = {
         public_id: result.public_id,
         secure_url: result.secure_url
       }
-    } */
+    }
   
     await product.save()
   
